@@ -1,20 +1,17 @@
 const Cell = ({ isWall, isVisited, isStart, isEnd }) => {
   let className =
-    "w-[24px] h-[24px] border border-gray-700 transition-colors duration-300 rounded-sm shadow-md";
+    "w-[24px] h-[24px] border border-gray-700 transition-colors duration-300 rounded-sm";
 
   if (isStart) {
-    className +=
-      " bg-gradient-to-br from-red-400 to-red-600 shadow-red-600/70";
+    className += " bg-red-600";        // Rich flat red
   } else if (isEnd) {
-    className +=
-      " bg-gradient-to-br from-green-400 to-green-600 shadow-green-600/70";
+    className += " bg-green-600";      // Deep flat green
   } else if (isVisited) {
-    className +=
-      " bg-gradient-to-br from-purple-400 to-purple-600 shadow-purple-600/70";
+    className += " bg-purple-600";     // Muted purple
   } else if (isWall) {
-    className += " bg-gray-900";
+    className += " bg-gray-900";       // Very dark gray for walls
   } else {
-    className += " bg-gray-100";
+    className += " bg-gray-100";       // Light gray for paths
   }
 
   return (

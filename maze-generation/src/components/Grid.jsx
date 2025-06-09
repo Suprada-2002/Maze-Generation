@@ -100,30 +100,31 @@ function Grid() {
 
       <Legend />
 
-      <table
-        className="bg-gray-800 max-w-xl w-full rounded-lg shadow-lg border-collapse"
-        style={{ borderSpacing: 1 }}
-        role="grid"
-        aria-label="Maze Grid"
-      >
-        <tbody>
-          {grid.map((row, rowIdx) => (
-            <tr key={rowIdx} role="row">
-              {row.map((cell, cellIdx) => (
-                <Cell
-                  key={cellIdx}
-                  row={cell.row}
-                  col={cell.col}
-                  isWall={cell.isWall}
-                  isStart={cell.isStart}
-                  isEnd={cell.isEnd}
-                  isVisited={cell.isVisited}
-                />
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+     <table
+  className="bg-gray-800 max-w-xl w-full rounded-md border border-gray-700 border-collapse"
+  style={{ borderSpacing: 2 }}
+  role="grid"
+  aria-label="Maze Grid"
+>
+  <tbody>
+    {grid.map((row, rowIdx) => (
+      <tr key={rowIdx} role="row">
+        {row.map((cell, cellIdx) => (
+          <Cell
+            key={cellIdx}
+            row={cell.row}
+            col={cell.col}
+            isWall={cell.isWall}
+            isStart={cell.isStart}
+            isEnd={cell.isEnd}
+            isVisited={cell.isVisited}
+          />
+        ))}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
     </div>
   );
 }
