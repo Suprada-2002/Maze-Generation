@@ -75,29 +75,40 @@ function Grid() {
   };
 
   return (
-    <div className="p-4 bg-gray-900 min-h-screen">
-    
-      <nav className="bg-gray-900 flex justify-around">
-        <h2 className="font-bold mb-4 text-sm text-white">Maze Generation</h2>
-       <div className="flex justify-end items-center gap-2">
-         <button
-          onClick={() => visualize("DFS")}
-          className="py-2 px-2 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700">DFS</button>
-        <button onClick={() => visualize('PRIMS')} className="py-2 px-2 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700">Randomized Prim's Algorithm</button>
-        <button onClick={() => visualize('KRUSKAL')} className="py-2 px-2 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700">Kruskal's</button>
-        <button onClick={resetGrid} className="py-2 px-2 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700">Rest Grid</button>
-       </div>
+    <div className="p-6 bg-gradient-to-br from-gray-800 via-gray-900 to-black min-h-screen flex flex-col items-center">
+      <nav className="bg-gray-900 w-full max-w-4xl rounded-lg shadow-lg flex flex-wrap justify-between items-center px-6 py-3 mb-6">
+        <h2 className="font-extrabold text-xl text-white select-none">Maze Generation Visualizer</h2>
+
+        <div className="flex flex-wrap gap-3 mt-3 sm:mt-0">
+          {[
+            { label: "DFS", onClick: () => visualize("DFS") },
+            { label: "Randomized Prim's", onClick: () => visualize("PRIMS") },
+            { label: "Kruskal's", onClick: () => visualize("KRUSKAL") },
+            { label: "Reset Grid", onClick: resetGrid },
+          ].map(({ label, onClick }) => (
+            <button
+              key={label}
+              onClick={onClick}
+              className="bg-gradient-to-r from-indigo-600 to-indigo-400 hover:from-indigo-500 hover:to-indigo-300 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300"
+              type="button"
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </nav>
 
-        <Legend />
+      <Legend />
 
       <table
-        className="bg-black my-10 m-auto border-collapse"
-    style={{ borderSpacing: 0 }}
+        className="bg-gray-800 max-w-xl w-full rounded-lg shadow-lg border-collapse"
+        style={{ borderSpacing: 1 }}
+        role="grid"
+        aria-label="Maze Grid"
       >
         <tbody>
           {grid.map((row, rowIdx) => (
-            <tr key={rowIdx}>
+            <tr key={rowIdx} role="row">
               {row.map((cell, cellIdx) => (
                 <Cell
                   key={cellIdx}
