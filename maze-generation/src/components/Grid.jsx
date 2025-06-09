@@ -2,10 +2,11 @@
 import { useEffect, useState } from "react";
 import Cell from "./Cell";
 import { generateMaze } from "../algorithm/Recursivebacktracking";
+import { generatePrimsMaze } from "../algorithm/Prims";
 
 function Grid() {
-  const noOfRows = 45;
-  const noOfCols = 45;
+  const noOfRows = 9;
+  const noOfCols = 9;
   const START_NODE_ROW = 1;
   const START_NODE_COL = 1;
   const END_NODE_ROW = noOfRows - 2;
@@ -36,14 +37,32 @@ function Grid() {
     return initialGrid;
   };
 
+  const resetGrid = () => {
+  const newGrid = grid.map((row, rowIdx) =>
+    row.map((cell, colIdx) => ({
+      ...cell,
+      isWall: true,
+      isStart: rowIdx === START_NODE_ROW && colIdx === START_NODE_COL,
+      isEnd: rowIdx === END_NODE_ROW && colIdx === END_NODE_COL,
+    }))
+  );
+  setGrid(newGrid);
+  return newGrid;
+};
+
+
   useEffect(() => {
     setGrid(getInitialGrid());
   }, []);
 
   const visualize = async (algo) => {
+     const clearedGrid = resetGrid(); 
     switch (algo) {
       case "DFS":
-        await generateMaze(grid, setGrid);
+        await generateMaze(clearedGrid, setGrid);
+        break;
+      case "PRIMS":
+        await generatePrimsMaze(clearedGrid, setGrid);
         break;
       default:
         break;
@@ -58,8 +77,10 @@ function Grid() {
           onClick={() => visualize("DFS")}
           className="py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-700"
         >
-          Generate Maze (DFS)
+          Backtracking Algo/Randomized DFS
         </button>
+        <button onClick={() => visualize('PRIMS')} className="py-3 px-2 bg-blue-500 text-white rounded-md">Randomized Prim's Algorithm</button>
+        <button onClick={resetGrid} className="py-3 px-2 bg-blue-500 text-white rounded-md">Rest Grid</button>
       </nav>
 
       <table
