@@ -1,5 +1,4 @@
-// Cell.js
-const Cell = ({ row, col, isWall, isStart, isEnd, isVisited }) => {
+const Cell = ({ isWall, isVisited, isStart, isEnd }) => {
   let className = "w-[20px] h-[20px] border border-gray-700 transition-colors duration-100";
 
   if (isStart) {
@@ -7,14 +6,14 @@ const Cell = ({ row, col, isWall, isStart, isEnd, isVisited }) => {
   } else if (isEnd) {
     className += " bg-green-500";
   } else if (isVisited) {
-    className += " bg-purple-500";  // visited cell animation color
+    className += " bg-purple-500";  // VISITED color
   } else if (isWall) {
     className += " bg-black";
-  }else {
-    className += " bg-blue-600"; // path cell
+  } else {
+    className += " bg-white";
   }
 
-  return <td id={`node-${row}-${col}`} className={className}></td>;
+  return <td className={className}></td>;
 };
 
 export default Cell;

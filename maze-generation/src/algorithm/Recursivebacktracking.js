@@ -1,4 +1,4 @@
-// Recursivebacktracking.js (maze generator)
+// Recursivebacktracking.js
 export async function generateMaze(grid, setGrid, delay = 30) {
   const numRows = grid.length;
   const numCols = grid[0].length;
@@ -10,36 +10,40 @@ export async function generateMaze(grid, setGrid, delay = 30) {
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const directions = [
-    [0, 1],
-    [1, 0],
-    [0, -1],
-    [-1, 0],
+    [0, 1],  // right
+    [1, 0],  // down
+    [0, -1], // left
+    [-1, 0], // up
   ];
 
+  function isInBounds(row, col) {
+    return row >= 0 && row < numRows && col >= 0 && col < numCols;
+  }
+
   async function backtrack(row, col) {
+    if (!isInBounds(row, col) || visited[row][col]) return;
+
     visited[row][col] = true;
-    grid[row][col].isWall = false; // mark current cell as path
+    grid[row][col].isWall = false;
     grid[row][col].isVisited = true;
+
     setGrid([...grid]);
     await sleep(delay);
 
-    // Shuffle directions for randomness
     const shuffledDirections = directions.sort(() => Math.random() - 0.5);
 
     for (const [dx, dy] of shuffledDirections) {
       const newRow = row + dx * 2;
       const newCol = col + dy * 2;
 
-      if (
-        newRow > 0 &&
-        newRow < numRows &&
-        newCol > 0 &&
-        newCol < numCols &&
-        !visited[newRow][newCol]
-      ) {
-        // Remove wall between current and next cell
-        grid[row + dx][col + dy].isWall = false;
-        grid[row + dx][col + dy].isVisited = true;
+      if (isInBounds(newRow, newCol) && !visited[newRow][newCol]) {
+        const wallRow = row + dx;
+        const wallCol = col + dy;
+
+        if (isInBounds(wallRow, wallCol)) {
+          grid[wallRow][wallCol].isWall = false;
+          grid[wallRow][wallCol].isVisited = true;
+        }
 
         setGrid([...grid]);
         await sleep(delay);
@@ -47,20 +51,15 @@ export async function generateMaze(grid, setGrid, delay = 30) {
         await backtrack(newRow, newCol);
       }
     }
-
-    // Optionally unmark visited for animation purposes
-    // grid[row][col].isVisited = false;
-    // setGrid([...grid]);
-    // await sleep(delay);
   }
 
-  // Choose random odd start cell inside the grid
-  const startRow = Math.floor(Math.random() * (numRows / 2)) * 2 + 1;
-  const startCol = Math.floor(Math.random() * (numCols / 2)) * 2 + 1;
+  // Ensure start cell is odd (to avoid walls)
+  const startRow = Math.floor(Math.random() * ((numRows - 1) / 2)) * 2 + 1;
+  const startCol = Math.floor(Math.random() * ((numCols - 1) / 2)) * 2 + 1;
 
   await backtrack(startRow, startCol);
 
-  // Mark start/end cells explicitly as path & not visited
+  // Cleanup: restore special cells
   grid.forEach((row) =>
     row.forEach((cell) => {
       cell.isVisited = false;

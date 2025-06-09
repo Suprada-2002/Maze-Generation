@@ -57,9 +57,23 @@ export async function generateKruskalsMaze(grid, setGrid, delay = 20) {
 
     if (find(id1) !== find(id2)) {
       grid[wallRow][wallCol].isWall = false;
+
+      // Mark cells and wall as visited for visualization
+      grid[cell1Row][cell1Col].isVisited = true;
+      grid[cell2Row][cell2Col].isVisited = true;
+      grid[wallRow][wallCol].isVisited = true;
+
       union(id1, id2);
       setGrid([...grid]);
       await sleep(delay);
     }
   }
+
+  // Clear isVisited after maze generation
+  for (const row of grid) {
+    for (const cell of row) {
+      cell.isVisited = false;
+    }
+  }
+  setGrid([...grid]);
 }
