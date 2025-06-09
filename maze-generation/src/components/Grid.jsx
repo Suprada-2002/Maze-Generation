@@ -15,6 +15,7 @@ function Grid() {
   const END_NODE_COL = noOfCols - 2;
 
   const [grid, setGrid] = useState([]);
+  const [isRunning, setIsRunning] =  useState(false);
 
   const createCell = (row, col) => {
     return {
@@ -61,16 +62,22 @@ function Grid() {
      const clearedGrid = resetGrid(); 
     switch (algo) {
       case "DFS":
+        setIsRunning(true);
         await generateMaze(clearedGrid, setGrid);
+        setIsRunning(false);
         break;
       case "PRIMS":
+        setIsRunning(true);
         await generatePrimsMaze(clearedGrid, setGrid);
+        setIsRunning(false);
         break;
-    case 'KRUSKAL':
-      await generateKruskalsMaze(clearedGrid, setGrid);
-      break;
+      case 'KRUSKAL':
+        setIsRunning(true);
+        await generateKruskalsMaze(clearedGrid, setGrid);
+        setIsRunning(false);
+        break;
       default:
-        break;
+          break;
     }
   };
 
@@ -88,8 +95,9 @@ function Grid() {
           ].map(({ label, onClick }) => (
             <button
               key={label}
+              disabled={isRunning}
               onClick={onClick}
-              className="bg-gradient-to-r from-indigo-600 to-indigo-400 hover:from-indigo-500 hover:to-indigo-300 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300"
+              className={isRunning ? "bg-gradient-to-r from-gray-600 to-gray-400 hover:from-gray-500 hover:to-gray-300 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300" : "bg-gradient-to-r from-indigo-600 to-indigo-400 hover:from-indigo-500 hover:to-indigo-300 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300"}
               type="button"
             >
               {label}
